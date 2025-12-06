@@ -3,14 +3,14 @@ import { nanoid } from "nanoid";
 import { generateMockBots, randomUpdateBots } from "../utils/mockBots";
 
 export const useStore = create((set, get) => ({
-  // ========== AUTH STATE (INITIAL: NOT LOGGED IN) ==========
+
   auth: {
     user: null,
     loggedIn: false, // CRITICAL: Must be false initially
     username: null,
   },
 
-  // ========== AUTH ACTIONS (NO localStorage) ==========
+
   login: (user) => {
     set({
       auth: {
@@ -19,7 +19,7 @@ export const useStore = create((set, get) => ({
         username: user.name || user.email.split("@")[0],
       },
     });
-    console.log("✅ User logged in:", user);
+    console.log(" User logged in:", user);
   },
 
   signup: (user) => {
@@ -30,7 +30,7 @@ export const useStore = create((set, get) => ({
         username: user.name || user.email.split("@")[0],
       },
     });
-    console.log("✅ User signed up:", user);
+    console.log(" User signed up:", user);
   },
 
   logout: () => {
@@ -41,16 +41,16 @@ export const useStore = create((set, get) => ({
         username: null,
       },
     });
-    console.log("🚪 User logged out");
+    console.log(" User logged out");
   },
 
-  // ========== BOTS STATE & ACTIONS ==========
+ 
   bots: [],
 
   seedBots: (count = 10) => {
     const bots = generateMockBots(count);
     set({ bots });
-    console.log(`🤖 Seeded ${count} bots`);
+    console.log(` Seeded ${count} bots`);
   },
 
   setBots: (bots) => set({ bots }),
@@ -65,7 +65,7 @@ export const useStore = create((set, get) => ({
       bots: state.bots.map((b) => (b.id === id ? { ...b, ...patch } : b)),
     })),
 
-  // ========== TASKS STATE & ACTIONS ==========
+
   tasks: [],
 
   addTask: (task) => {
@@ -78,7 +78,7 @@ export const useStore = create((set, get) => ({
     set((state) => ({
       tasks: [...state.tasks, newTask],
     }));
-    console.log("📋 Task added:", newTask);
+    console.log(" Task added:", newTask);
     return newTask;
   },
 
