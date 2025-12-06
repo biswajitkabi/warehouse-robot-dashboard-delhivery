@@ -160,5 +160,3 @@ Framework Preset: Vite
 
 Live Deployment:  
 https://warehouse-robot-dashboard-delhivery-biswajit.vercel.app
-
-
