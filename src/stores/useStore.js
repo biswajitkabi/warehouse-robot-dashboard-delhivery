@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { nanoid } from "nanoid";
 
 export const useStore = create((set, get) => ({
