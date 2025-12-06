@@ -1,7 +1,9 @@
 # Warehouse Robot Dashboard
 
-A real-time, responsive warehouse automation dashboard built for the Delhivery Frontend Intern Assignment.  
-It simulates 10 warehouse robots, task allocation, task queue management, analytics, and live map visualization.
+Delhivery — Front-End Developer Internship Assignment - Biswajit Kabi
+
+A real-time, responsive warehouse automation dashboard built for the Delhivery Front-End Developer Internship Assignment.
+It simulates ten warehouse robots, task allocation, task queue management, analytics, and live map visualization.
 
 Live Demo:  
 https://warehouse-robot-dashboard-delhivery-biswajit.vercel.app
@@ -11,8 +13,8 @@ https://warehouse-robot-dashboard-delhivery-biswajit.vercel.app
 # 1. How to Run the Project
 
 ## Prerequisites
-- Node.js (v16 or higher)
-- npm (or yarn)
+- Node.js 
+- npm 
 
 ## Installation
 ```
@@ -22,16 +24,6 @@ npm install
 ## Development Mode
 ```
 npm run dev
-```
-
-## Production Build
-```
-npm run build
-```
-
-## Preview Production Build
-```
-npm run preview
 ```
 
 ---
@@ -147,16 +139,6 @@ State slices:
 [{ id, pickup, drop, priority, comments, createdAt }]
 ```
 
----
-
-# 6. Deployment Details
-Hosted on Vercel using:
-
-```
-Build Command: npm run build
-Output Directory: dist
-Framework Preset: Vite
-```
 
 Live Deployment:  
 https://warehouse-robot-dashboard-delhivery-biswajit.vercel.app
