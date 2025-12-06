@@ -1,94 +1,59 @@
 import React, { useState } from "react";
 import { useStore } from "../stores/useStore";
+import Card from "../components/Card";
 
 export default function TaskAllocationPage() {
-  const addTask = useStore((s) => s.addTask);
+  const addTask = useStore(s => s.addTask);
+  const [form, setForm] = useState({ pickup: "", drop: "", priority: "medium", comments: "" });
 
-  const [form, setForm] = useState({
-    pickup: "",
-    drop: "",
-    priority: "medium",
-    comments: "",
-  });
-
-  function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  }
-
-  function handleSubmit(e) {
+  function onChange(e){ setForm({ ...form, [e.target.name]: e.target.value }); }
+  function onSubmit(e){
     e.preventDefault();
-    addTask(form);  // add to global state
-    alert("Task Created Successfully!");
-    setForm({
-      pickup: "",
-      drop: "",
-      priority: "medium",
-      comments: "",
-    });
+    addTask(form);
+    setForm({ pickup: "", drop: "", priority: "medium", comments: "" });
   }
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Task Allocation</h1>
+    <div>
+      <h1 className="text-2xl font-bold mb-6">Allocate Task</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 shadow rounded-lg">
-        
-        <div>
-          <label className="block mb-1 font-medium">Pickup Location</label>
-          <input
-            name="pickup"
-            value={form.pickup}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-            placeholder="Ex: A1"
-          />
-        </div>
+      <Card className="max-w-2xl">
+        <form onSubmit={onSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-600">Pickup</label>
+            <input name="pickup" value={form.pickup} onChange={onChange}
+              className="w-full border border-gray-200 rounded px-3 py-2 focus:ring-2 focus:ring-red-500 outline-none" required/>
+          </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Drop Location</label>
-          <input
-            name="drop"
-            value={form.drop}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-            placeholder="Ex: B4"
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-600">Drop</label>
+            <input name="drop" value={form.drop} onChange={onChange}
+              className="w-full border border-gray-200 rounded px-3 py-2 focus:ring-2 focus:ring-red-500 outline-none" required/>
+          </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Priority</label>
-          <select
-            name="priority"
-            value={form.priority}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-        </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-600">Priority</label>
+              <select name="priority" value={form.priority} onChange={onChange}
+                className="w-full border border-gray-200 rounded px-3 py-2">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Comments</label>
-          <textarea
-            name="comments"
-            value={form.comments}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            rows="3"
-          />
-        </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-600">Comments</label>
+              <input name="comments" value={form.comments} onChange={onChange}
+                className="w-full border border-gray-200 rounded px-3 py-2" />
+            </div>
+          </div>
 
-        <button
-          className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"
-          type="submit"
-        >
-          Create Task
-        </button>
-      </form>
+          <div className="flex justify-end">
+            <button type="submit" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Create Task</button>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 }

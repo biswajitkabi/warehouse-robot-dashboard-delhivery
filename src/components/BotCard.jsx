@@ -1,29 +1,49 @@
 import React from "react";
+import Card from "./Card";
 
 export default function BotCard({ bot }) {
   const { id, battery, status, currentTask, speed, lastUpdated } = bot;
   const time = new Date(lastUpdated).toLocaleTimeString();
 
   const statusColor = {
-    idle: "bg-gray-200 text-gray-800",
-    busy: "bg-blue-100 text-blue-800",
-    charging: "bg-green-100 text-green-800",
-    error: "bg-red-100 text-red-800"
-  }[status] || "bg-gray-100";
+    idle: "text-gray-700",
+    busy: "text-blue-600",
+    charging: "text-green-600",
+    error: "text-red-600"
+  }[status] || "text-gray-700";
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-sm flex flex-col gap-2">
+    <Card className="flex flex-col gap-3 w-full">
       <div className="flex justify-between items-start">
-        <h3 className="font-semibold text-lg">{id}</h3>
-        <div className={`px-2 py-1 rounded text-sm ${statusColor}`}>{status}</div>
+        <div>
+          <div className="text-xs text-gray-400">ID</div>
+          <div className="text-base md:text-lg font-semibold">{id}</div>
+        </div>
+        <div className={`text-xs md:text-sm font-medium ${statusColor}`}>
+          {status.toUpperCase()}
+        </div>
       </div>
-      <div className="text-sm">Battery: <span className="font-medium">{battery}%</span></div>
-      <div className="text-sm">Current Task: <span className="font-medium">{currentTask ?? "—"}</span></div>
-      <div className="text-sm">Speed: <span className="font-medium">{speed} m/s</span></div>
-      <div className="text-xs text-gray-500">Last: {time}</div>
-      <div className="w-full bg-gray-200 h-2 rounded">
-        <div style={{ width: `${battery}%` }} className={`h-2 rounded ${battery < 20 ? "bg-red-500" : "bg-indigo-500"}`} />
+
+      <div className="grid grid-cols-2 gap-2 text-xs md:text-sm">
+        <div className="text-gray-500">Battery</div>
+        <div className="font-medium">{battery}%</div>
+
+        <div className="text-gray-500">Task</div>
+        <div className="font-medium truncate">{currentTask ?? "—"}</div>
+
+        <div className="text-gray-500">Speed</div>
+        <div className="font-medium">{speed} m/s</div>
       </div>
-    </div>
+
+      <div className="flex items-center justify-between gap-2">
+        <div className="text-xs text-gray-400 truncate">Last: {time}</div>
+        <div className="w-20 md:w-28 bg-gray-200 h-2 rounded overflow-hidden flex-shrink-0">
+          <div 
+            style={{ width: `${battery}%` }} 
+            className={`h-2 transition-all ${battery < 20 ? "bg-red-600" : "bg-green-600"}`}
+          />
+        </div>
+      </div>
+    </Card>
   );
 }

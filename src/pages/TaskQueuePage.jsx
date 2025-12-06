@@ -1,40 +1,43 @@
 import React, { useEffect } from "react";
 import { useStore } from "../stores/useStore";
+import Card from "../components/Card";
 
 export default function TaskQueuePage() {
-  const tasks = useStore((s) => s.tasks);
-  const removeTaskById = useStore((s) => s.removeTaskById);
+  const tasks = useStore(s => s.tasks);
+  const removeTaskById = useStore(s => s.removeTaskById);
+  const popOldestTask = useStore(s => s.popOldestTask);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (tasks.length > 0) {
-        removeTaskById(tasks[0].id);  // remove the oldest task
+    const id = setInterval(() => {
+      // remove oldest task if exists
+      if (useStore.getState().tasks.length > 0) {
+        popOldestTask();
       }
     }, 3000);
-
-    return () => clearInterval(timer);
-  }, [tasks, removeTaskById]);
+    return () => clearInterval(id);
+  }, [popOldestTask]);
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Task Queue</h1>
+    <div>
+      <h1 className="text-2xl font-bold mb-6">Task Queue</h1>
 
-      {tasks.length === 0 && (
-        <p className="text-gray-500">No pending tasks.</p>
-      )}
-
-      <div className="space-y-3">
-        {tasks.map((task) => (
-          <div key={task.id} className="p-4 bg-white shadow rounded">
-            <div className="font-semibold">
-              {task.pickup} → {task.drop}
-            </div>
-            <div className="text-sm text-gray-600">Priority: {task.priority}</div>
-            <div className="text-sm text-gray-600">Comments: {task.comments || "—"}</div>
-          </div>
-        ))}  
-        
-      </div>
+      <Card>
+        {tasks.length === 0 ? (
+          <div className="text-gray-500">No pending tasks.</div>
+        ) : (
+          <ul className="space-y-3">
+            {tasks.map(t => (
+              <li key={t.id} className="flex justify-between items-center">
+                <div>
+                  <div className="font-medium">{t.pickup} → {t.drop}</div>
+                  <div className="text-xs text-gray-500">{t.priority} • {t.comments}</div>
+                </div>
+                <div className="text-xs text-gray-400">{new Date(t.createdAt).toLocaleTimeString()}</div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
     </div>
   );
 }

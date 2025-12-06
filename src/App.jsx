@@ -1,43 +1,126 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useStore } from "./stores/useStore";
+import MainLayout from "./layout/MainLayout";
+import DashboardPage from "./pages/DashboardPage";
 import BotStatusPage from "./pages/BotStatusPage";
 import TaskAllocationPage from "./pages/TaskAllocationPage";
-import TaskQueuePage from "./pages/TaskQueuePage"; // we will create this next
+import TaskQueuePage from "./pages/TaskQueuePage";
+import AnalyticsPage from "./pages/AnalyticsPage";
+import MapPage from "./pages/MapPage";
+import AuthPage from "./pages/AuthPage";
+
+// Protected Route Component
+function ProtectedRoute({ children }) {
+  const isLoggedIn = useStore((s) => s.auth.loggedIn);
+  
+  if (!isLoggedIn) {
+    return <Navigate to="/auth" replace />;
+  }
+  
+  return <MainLayout>{children}</MainLayout>;
+}
+
+// Public Route Component (redirect to dashboard if already logged in)
+function PublicRoute({ children }) {
+  const isLoggedIn = useStore((s) => s.auth.loggedIn);
+  
+  if (isLoggedIn) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  
+  return children;
+}
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow p-4 flex items-center gap-4">
-        <Link to="/" className="font-bold">
-          Warehouse Dashboard
-        </Link>
-        <Link to="/bots" className="text-sm text-gray-600">
-          Bot Status
-        </Link>
-        <Link to="/tasks" className="text-sm text-gray-600">
-          Tasks
-        </Link>
-        <Link to="/allocate" className="text-sm text-gray-600">
-          Allocate Task
-        </Link>
-        <Link to="/queue" className="text-sm text-gray-600">
-          Task Queue
-        </Link>
-      </nav>
+    <Routes>
+      {/* Default Route - Redirect based on auth status */}
+      <Route
+        path="/"
+        element={
+          <Navigate
+            to={useStore.getState().auth.loggedIn ? "/dashboard" : "/auth"}
+            replace
+          />
+        }
+      />
 
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div className="p-6">Welcome — build the dashboard pages.</div>
-          }
-        />
-        <Route path="/bots" element={<BotStatusPage />} />
-        <Route path="/allocate" element={<TaskAllocationPage />} />
-        <Route path="/queue" element={<TaskQueuePage />} />
+      {/* Public Route - Auth Page */}
+      <Route
+        path="/auth"
+        element={
+          <PublicRoute>
+            <AuthPage />
+          </PublicRoute>
+        }
+      />
 
-        {/* other routes to add later */}
-      </Routes>
-    </div>
+      {/* Protected Routes */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/bots"
+        element={
+          <ProtectedRoute>
+            <BotStatusPage />
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/allocate"
+        element={
+          <ProtectedRoute>
+            <TaskAllocationPage />
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/queue"
+        element={
+          <ProtectedRoute>
+            <TaskQueuePage />
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <AnalyticsPage />
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/map"
+        element={
+          <ProtectedRoute>
+            <MapPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Catch all - redirect to auth if not logged in, dashboard if logged in */}
+      <Route
+        path="*"
+        element={
+          <Navigate
+            to={useStore.getState().auth.loggedIn ? "/dashboard" : "/auth"}
+            replace
+          />
+        }
+      />
+    </Routes>
   );
 }
