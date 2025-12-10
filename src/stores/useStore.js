@@ -6,7 +6,7 @@ export const useStore = create((set, get) => ({
 
   auth: {
     user: null,
-    loggedIn: false, // CRITICAL: Must be false initially
+    loggedIn: false, // Must be false initially
     username: null,
   },
 
